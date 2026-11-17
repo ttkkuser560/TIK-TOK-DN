@@ -2,222 +2,105 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090914">
-<meta name="description" content="TikTok Video Downloader">
+<meta name="description" content="TikDown Multi Platform Video Tool">
 <link rel="manifest" href="manifest.json">
-<title>TikTok Downloader</title>
+<title>TikDown - Video Downloader</title>
 
 <style>
 *{box-sizing:border-box}
-
 body{
- margin:0;
- padding:18px;
- font-family:Arial,sans-serif;
- color:white;
- background:#090914;
- min-height:100vh;
+ margin:0;padding:18px;font-family:Arial;
+ color:white;background:#090914;min-height:100vh
 }
-
-.app{
- max-width:480px;
- margin:auto;
-}
-
+.app{max-width:480px;margin:auto}
 .header{
- display:flex;
- align-items:center;
- justify-content:space-between;
- margin:10px 0 25px;
+ display:flex;justify-content:space-between;
+ align-items:center;margin:10px 0 20px
 }
-
-.logo{
- font-size:22px;
- font-weight:900;
-}
-
-.logo span{color:#00f5d4}
-
+.logo{font-size:23px;font-weight:900}
+.logo span{color:#00e5cc}
 .install{
- width:auto;
- padding:10px 14px;
- margin:0;
- background:#19192c;
- border:1px solid #34344c;
- border-radius:10px;
+ width:auto!important;margin:0!important;
+ padding:10px 12px!important;
+ background:#19192c!important;color:white!important;
+ border:1px solid #34344c!important
 }
-
-.hero{
- text-align:center;
- padding:25px 10px;
-}
-
-.icon{
- font-size:48px;
- margin-bottom:12px;
-}
-
-h1{
- font-size:27px;
- margin:5px 0;
-}
-
-.hero p{
- color:#9999b2;
- font-size:13px;
-}
-
+.hero{text-align:center;padding:20px 5px}
+.hero .icon{font-size:45px}
+h1{font-size:27px;margin:8px}
+.hero p{color:#9999b2;font-size:13px}
 .container{
- background:#141426;
- border:1px solid #292943;
- padding:20px;
- border-radius:20px;
+ background:#141426;border:1px solid #292943;
+ padding:18px;border-radius:20px
 }
-
-input{
- width:100%;
- padding:16px;
+.platform-grid{
+ display:grid;grid-template-columns:repeat(3,1fr);
+ gap:9px;margin:12px 0 18px
+}
+.platform{
+ padding:12px 3px;border-radius:12px;
+ background:#090914;color:white;
  border:1px solid #34344c;
- border-radius:12px;
- background:#090914;
- color:white;
- outline:none;
- margin:10px 0;
- font-size:14px;
+ font-size:12px;cursor:pointer
 }
-
-input:focus{border-color:#00e5cc}
-
+.platform.active{
+ border:1px solid #00e5cc;
+ background:#12302f;color:#00e5cc
+}
+input{
+ width:100%;padding:15px;
+ border:1px solid #34344c;border-radius:12px;
+ background:#090914;color:white;
+ outline:none;margin:10px 0;font-size:14px
+}
 button{
- width:100%;
- padding:14px;
- border:0;
- border-radius:12px;
- margin-top:10px;
+ width:100%;padding:14px;border:0;
+ border-radius:12px;margin-top:10px;
  background:linear-gradient(90deg,#00e5cc,#715cff);
- color:#080817;
- font-weight:bold;
- font-size:14px;
- cursor:pointer;
+ color:#080817;font-weight:bold;cursor:pointer
 }
-
-button:disabled{
- opacity:.5;
-}
-
-.install{
- color:white;
-}
-
-.loading{
- margin-top:15px;
- display:none;
-}
-
+button:disabled{opacity:.5}
+.loading{margin-top:15px;display:none}
 .progress-bg{
- height:8px;
- background:#292943;
- border-radius:20px;
- overflow:hidden;
+ height:8px;background:#292943;
+ border-radius:20px;overflow:hidden
 }
-
 .progress-bar{
- height:100%;
- width:0%;
- background:linear-gradient(90deg,#00e5cc,#715cff);
- transition:width .2s;
+ height:100%;width:0%;
+ background:linear-gradient(90deg,#00e5cc,#715cff)
 }
-
-.progress-text{
- font-size:12px;
- color:#aaa;
- margin-top:7px;
- text-align:center;
-}
-
+.progress-text{text-align:center;font-size:12px;color:#aaa;margin-top:7px}
 .preview{
- margin-top:18px;
- padding:12px;
- background:#0c0c19;
- border-radius:15px;
- border:1px solid #292943;
+ margin-top:18px;padding:12px;
+ background:#0c0c19;border-radius:15px;
+ border:1px solid #292943
 }
-
-video{
- width:100%;
- max-height:450px;
- border-radius:12px;
- background:black;
+video{width:100%;max-height:450px;border-radius:12px}
+iframe{
+ width:100%;height:260px;border:0;border-radius:12px;
+ background:#000
 }
-
-.video-title{
- font-size:14px;
- margin:12px 0;
- overflow-wrap:anywhere;
-}
-
-.download-btn{
- background:linear-gradient(90deg,#00e5cc,#00aaff);
-}
-
-.audio-btn{
- background:linear-gradient(90deg,#a66bff,#715cff);
- color:white;
-}
-
-h3{
- margin-top:30px;
- font-size:17px;
-}
-
+.video-title{font-size:14px;margin:12px 0;overflow-wrap:anywhere}
+.download-btn{background:linear-gradient(90deg,#00e5cc,#00aaff)}
+.audio-btn{background:linear-gradient(90deg,#a66bff,#715cff);color:white}
+h3{margin-top:28px;font-size:17px}
 .card{
- display:flex;
- gap:12px;
- padding:12px;
- margin-top:10px;
- background:#141426;
- border:1px solid #292943;
- border-radius:14px;
+ display:flex;gap:12px;padding:12px;margin-top:10px;
+ background:#141426;border:1px solid #292943;
+ border-radius:14px
 }
-
 .thumb{
- width:85px;
- height:110px;
- object-fit:cover;
- border-radius:9px;
- background:#292943;
+ width:85px;height:110px;object-fit:cover;
+ border-radius:9px;background:#292943
 }
-
-.card-info{
- flex:1;
- min-width:0;
-}
-
-.card-title{
- font-size:13px;
- overflow-wrap:anywhere;
-}
-
-.small-btn{
- padding:9px;
- font-size:11px;
- margin-top:7px;
-}
-
-.empty{
- text-align:center;
- padding:20px;
- color:#77778f;
- font-size:13px;
-}
-
-.footer{
- text-align:center;
- color:#66667c;
- font-size:12px;
- margin:30px 0 15px;
-}
+.card-info{flex:1;min-width:0}
+.card-title{font-size:13px;overflow-wrap:anywhere}
+.small-btn{padding:9px;font-size:11px;margin-top:7px}
+.empty{text-align:center;padding:20px;color:#77778f;font-size:13px}
+.footer{text-align:center;color:#66667c;font-size:12px;margin:30px 0 15px}
+.note{font-size:12px;color:#9999b2;line-height:1.6}
 </style>
 </head>
 
@@ -227,24 +110,32 @@ h3{
 <div class="header">
  <div class="logo">TIK<span>DOWN</span></div>
  <button class="install" id="installBtn" style="display:none">
-  ⬇ Install App
+ ⬇ Install App
  </button>
 </div>
 
 <div class="hero">
- <div class="icon">🎵</div>
- <h1>TikTok Downloader</h1>
- <p>Download TikTok videos & audio easily</p>
+ <div class="icon">🎬</div>
+ <h1>TikDown</h1>
+ <p>Multi-Platform Video Hub</p>
 </div>
 
 <div class="container">
 
-<input id="url" type="url"
-placeholder="Paste TikTok video link here">
+<b>🌐 Select Platform</b>
 
-<button id="downloadBtn" onclick="getVideo()">
- ⚡ Get Video
-</button>
+<div class="platform-grid">
+ <button class="platform active" data-platform="tiktok">🎵 TikTok</button>
+ <button class="platform" data-platform="facebook">🔵 Facebook</button>
+ <button class="platform" data-platform="instagram">📸 Instagram</button>
+ <button class="platform" data-platform="youtube">▶️ YouTube</button>
+ <button class="platform" data-platform="pinterest">📌 Pinterest</button>
+ <button class="platform" data-platform="threads">🧵 Threads</button>
+</div>
+
+<input id="url" type="url" placeholder="Paste TikTok link here">
+
+<button id="getBtn">⚡ Get Video</button>
 
 <div class="loading" id="loading">
  <div class="progress-bg">
@@ -254,210 +145,270 @@ placeholder="Paste TikTok video link here">
 </div>
 
 <div id="previewBox"></div>
-
 </div>
 
 <h3>📜 Download History</h3>
 <div id="history"></div>
 
-<div class="footer">
- TikDown © 2026 | TikTok Downloader
-</div>
-
+<div class="footer">TikDown © 2026</div>
 </div>
 
 <script>
+let selectedPlatform="tiktok";
 let currentVideo="";
 let currentAudio="";
 let currentData={};
 
-let installPrompt=null;
+const $=id=>document.getElementById(id);
 
-const installBtn=document.getElementById("installBtn");
+const patterns={
+ tiktok:/tiktok\.com/i,
+ facebook:/(facebook\.com|fb\.watch)/i,
+ instagram:/instagram\.com/i,
+ youtube:/(youtube\.com|youtu\.be)/i,
+ pinterest:/pinterest\./i,
+ threads:/threads\.net/i
+};
+
+document.querySelectorAll(".platform").forEach(btn=>{
+ btn.addEventListener("click",()=>{
+  document.querySelectorAll(".platform").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+  selectedPlatform=btn.dataset.platform;
+  $("url").placeholder="Paste "+selectedPlatform+" link here";
+  $("previewBox").innerHTML="";
+ });
+});
+
+let installPrompt=null;
 
 window.addEventListener("beforeinstallprompt",e=>{
  e.preventDefault();
  installPrompt=e;
- installBtn.style.display="block";
+ $("installBtn").style.display="block";
 });
 
-installBtn.onclick=async()=>{
+$("installBtn").onclick=async()=>{
  if(!installPrompt){
-  alert("Use your browser menu and select Install App or Add to Home Screen.");
+  alert("Open browser menu and choose Install App.");
   return;
  }
-
  await installPrompt.prompt();
  installPrompt=null;
- installBtn.style.display="none";
 };
 
 if("serviceWorker" in navigator){
  window.addEventListener("load",()=>{
-  navigator.serviceWorker.register("./sw.js")
-   .catch(err=>console.log(err));
+  navigator.serviceWorker.register("./sw.js").catch(console.error);
  });
 }
 
 function cleanName(name){
- return (name||"tiktok_video")
- .replace(/[^a-z0-9]/gi,"_")
- .toLowerCase()
- .substring(0,50);
+ return (name||"video").replace(/[^a-z0-9]/gi,"_").toLowerCase().substring(0,50);
 }
 
 function startLoading(){
- const loading=document.getElementById("loading");
- const bar=document.getElementById("bar");
- const text=document.getElementById("progressText");
-
- loading.style.display="block";
- bar.style.width="0%";
-
+ $("loading").style.display="block";
+ $("bar").style.width="0%";
  let p=0;
-
  const timer=setInterval(()=>{
   p=Math.min(p+4,90);
-  bar.style.width=p+"%";
-  text.innerText=p+"%";
+  $("bar").style.width=p+"%";
+  $("progressText").innerText=p+"%";
  },100);
 
  return {
   finish(){
    clearInterval(timer);
-   bar.style.width="100%";
-   text.innerText="100%";
+   $("bar").style.width="100%";
+   $("progressText").innerText="100%";
   },
   stop(){
    clearInterval(timer);
-   loading.style.display="none";
+   $("loading").style.display="none";
   }
  };
 }
 
+function validUrl(value){
+ try{
+  const u=new URL(value);
+  return u.protocol==="https:" || u.protocol==="http:";
+ }catch{return false;}
+}
+
+function youtubeId(url){
+ try{
+  const u=new URL(url);
+  if(u.hostname==="youtu.be") return u.pathname.slice(1);
+  if(u.hostname.includes("youtube.com")){
+   if(u.pathname==="/watch")return u.searchParams.get("v");
+   const m=u.pathname.match(/^\/(embed|shorts)\/([^/]+)/);
+   return m?m[2]:null;
+  }
+ }catch{}
+ return null;
+}
+
+function showExternalPreview(url,platform){
+ const box=$("previewBox");
+ const preview=document.createElement("div");
+ preview.className="preview";
+
+ const title=document.createElement("div");
+ title.className="video-title";
+ title.textContent=platform.toUpperCase()+" LINK DETECTED";
+
+ const info=document.createElement("p");
+ info.className="note";
+ info.textContent="This platform requires its own authorized API or embed permission for a playable preview and downloads.";
+
+ const link=document.createElement("a");
+ link.href=url;
+ link.target="_blank";
+ link.rel="noopener noreferrer";
+ link.textContent="Open original content";
+ link.style.color="#00e5cc";
+
+ preview.append(title,info,link);
+
+ if(platform==="youtube"){
+  const id=youtubeId(url);
+  if(id && /^[a-zA-Z0-9_-]{11}$/.test(id)){
+   const frame=document.createElement("iframe");
+   frame.src="https://www.youtube-nocookie.com/embed/"+encodeURIComponent(id);
+   frame.allow="accelerometer; autoplay; encrypted-media; picture-in-picture";
+   frame.allowFullscreen=true;
+   preview.insertBefore(frame,info);
+  }
+ }
+
+ box.replaceChildren(preview);
+}
+
 async function getVideo(){
 
- const url=document.getElementById("url").value.trim();
- const box=document.getElementById("previewBox");
- const btn=document.getElementById("downloadBtn");
+ const url=$("url").value.trim();
+ const box=$("previewBox");
+ const btn=$("getBtn");
 
  if(!url){
-  alert("Paste TikTok link first!");
+  alert("Paste a link first!");
   return;
  }
 
- if(!/^https?:\/\/(www\.|vm\.|vt\.)?tiktok\.com\//i.test(url)){
-  alert("Only TikTok links are supported!");
+ if(!validUrl(url) || !patterns[selectedPlatform].test(url)){
+  alert("Please enter a valid "+selectedPlatform+" link!");
   return;
  }
 
  btn.disabled=true;
  box.innerHTML="";
-
  const loader=startLoading();
 
  try{
 
-  const api="https://tikwm.com/api/?url="+encodeURIComponent(url);
-
-  const response=await fetch(api);
-  if(!response.ok) throw new Error("API request failed");
-
-  const data=await response.json();
-
-  if(data.code!==0 || !data.data){
-   throw new Error("Video not found");
+  if(selectedPlatform!=="tiktok"){
+   loader.finish();
+   showExternalPreview(url,selectedPlatform);
+   return;
   }
 
-  currentVideo=data.data.play;
-  currentAudio=data.data.music;
+  const api="https://tikwm.com/api/?url="+encodeURIComponent(url);
+  const response=await fetch(api);
+  if(!response.ok)throw Error("API request failed");
+
+  const result=await response.json();
+  if(result.code!==0 || !result.data)throw Error("Video not found");
+
+  currentVideo=result.data.play;
+  currentAudio=result.data.music;
 
   currentData={
-   title:data.data.title||"TikTok Video",
-   img:data.data.cover||""
+   title:result.data.title||"TikTok Video",
+   img:result.data.cover||""
   };
 
-  if(!currentVideo) throw new Error("Video unavailable");
+  if(!currentVideo)throw Error("Video unavailable");
 
   loader.finish();
 
-  box.innerHTML=`
-   <div class="preview">
+  const preview=document.createElement("div");
+  preview.className="preview";
 
-    <video controls playsinline
-    src="${currentVideo}"></video>
+  const video=document.createElement("video");
+  video.controls=true;
+  video.playsInline=true;
+  video.src=currentVideo;
 
-    <div class="video-title"></div>
+  const title=document.createElement("div");
+  title.className="video-title";
+  title.textContent=currentData.title;
 
-    <button class="download-btn" onclick="downloadVideo()">
-     ⬇ Download MP4
-    </button>
+  const videoBtn=document.createElement("button");
+  videoBtn.className="download-btn";
+  videoBtn.textContent="⬇ Download MP4";
+  videoBtn.onclick=downloadVideo;
 
-    <button class="audio-btn" onclick="downloadMP3()"
-    ${currentAudio?"":"disabled"}>
-     🎧 Download MP3
-    </button>
+  const audioBtn=document.createElement("button");
+  audioBtn.className="audio-btn";
+  audioBtn.textContent="🎧 Download MP3";
+  audioBtn.disabled=!currentAudio;
+  audioBtn.onclick=downloadMP3;
 
-   </div>
-  `;
-
-  box.querySelector(".video-title").textContent=currentData.title;
+  preview.append(video,title,videoBtn,audioBtn);
+  box.replaceChildren(preview);
 
   saveHistory();
 
  }catch(error){
-
   loader.stop();
-  box.innerHTML=`
-   <div class="empty">
-    ⚠️ Unable to get video.<br>
-    Please check the link and try again.
-   </div>
-  `;
-
+  box.textContent="⚠️ Unable to load content. Check the link or try again.";
  }finally{
   btn.disabled=false;
  }
 }
 
-async function downloadFile(url,extension){
+$("getBtn").onclick=getVideo;
 
- if(!url) return;
+async function downloadFile(url,extension,title){
+
+ if(!url){
+  alert("File unavailable");
+  return;
+ }
 
  try{
-
   const response=await fetch(url);
-  if(!response.ok) throw new Error("Download failed");
+  if(!response.ok)throw Error("Download failed");
 
   const blob=await response.blob();
   const objectURL=URL.createObjectURL(blob);
 
   const a=document.createElement("a");
   a.href=objectURL;
-  a.download=cleanName(currentData.title)+"."+extension;
+  a.download=cleanName(title)+"."+extension;
   document.body.appendChild(a);
   a.click();
   a.remove();
 
   setTimeout(()=>URL.revokeObjectURL(objectURL),10000);
-
- }catch(error){
-  alert("Download failed. Try opening the video link in your browser.");
+ }catch{
+  alert("Download failed. The source may block browser downloads.");
  }
 }
 
 function downloadVideo(){
- downloadFile(currentVideo,"mp4");
+ downloadFile(currentVideo,"mp4",currentData.title);
 }
 
 function downloadMP3(){
- downloadFile(currentAudio,"mp3");
+ downloadFile(currentAudio,"mp3",currentData.title);
 }
 
 function saveHistory(){
 
- let h=JSON.parse(localStorage.getItem("tt"))||[];
-
+ let h=JSON.parse(localStorage.getItem("tt")||"[]");
  h=h.filter(v=>v.video!==currentVideo);
 
  h.unshift({
@@ -468,79 +419,56 @@ function saveHistory(){
  });
 
  h=h.slice(0,5);
-
  localStorage.setItem("tt",JSON.stringify(h));
-
  loadHistory();
-}
-
-function redownload(url,type,title){
-
- if(!url){
-  alert("File unavailable");
-  return;
- }
-
- currentData.title=title;
- downloadFile(url,type);
 }
 
 function loadHistory(){
 
- let h=JSON.parse(localStorage.getItem("tt"))||[];
- let html="";
+ const h=JSON.parse(localStorage.getItem("tt")||"[]");
+ const box=$("history");
 
- if(h.length===0){
-  document.getElementById("history").innerHTML=
-  '<div class="empty">No download history yet</div>';
+ if(!h.length){
+  box.innerHTML='<div class="empty">No download history yet</div>';
   return;
  }
 
- h.forEach((v,i)=>{
-
-  html+=`
-   <div class="card">
-
-    <img class="thumb"
-    src="${v.img||""}"
-    alt="Thumbnail">
-
-    <div class="card-info">
-     <div class="card-title" id="title${i}"></div>
-
-     <button class="small-btn"
-     onclick="redownloadByIndex(${i},'mp4')">
-      ↻ Video
-     </button>
-
-     <button class="small-btn"
-     onclick="redownloadByIndex(${i},'mp3')">
-      ↻ MP3
-     </button>
-    </div>
-
-   </div>
-  `;
- });
-
- document.getElementById("history").innerHTML=html;
+ box.replaceChildren();
 
  h.forEach((v,i)=>{
-  document.getElementById("title"+i).textContent=v.title;
+  const card=document.createElement("div");
+  card.className="card";
+
+  const img=document.createElement("img");
+  img.className="thumb";
+  img.src=v.img||"";
+  img.alt="Video thumbnail";
+
+  const info=document.createElement("div");
+  info.className="card-info";
+
+  const title=document.createElement("div");
+  title.className="card-title";
+  title.textContent=v.title;
+
+  const videoBtn=document.createElement("button");
+  videoBtn.className="small-btn";
+  videoBtn.textContent="↻ Video";
+  videoBtn.onclick=()=>downloadFile(v.video,"mp4",v.title);
+
+  const audioBtn=document.createElement("button");
+  audioBtn.className="small-btn";
+  audioBtn.textContent="↻ MP3";
+  audioBtn.disabled=!v.audio;
+  audioBtn.onclick=()=>downloadFile(v.audio,"mp3",v.title);
+
+  info.append(title,videoBtn,audioBtn);
+  card.append(img,info);
+  box.append(card);
  });
-}
-
-function redownloadByIndex(index,type){
- let h=JSON.parse(localStorage.getItem("tt"))||[];
- let v=h[index];
-
- if(!v)return;
-
- currentData.title=v.title;
- downloadFile(type==="mp3"?v.audio:v.video,type);
 }
 
 loadHistory();
 </script>
 </body>
-</html>
+ </html>
