@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#090914">
+<meta name="description" content="TikTok Video Downloader">
+<link rel="manifest" href="manifest.json">
+<title>TikTok Downloader</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+ margin:0;
+ padding:18px;
+ font-family:Arial,sans-serif;
+ color:white;
+ background:#090914;
+ min-height:100vh;
+}
+
+.app{
+ max-width:480px;
+ margin:auto;
+}
+
+.header{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ margin:10px 0 25px;
+}
+
+.logo{
+ font-size:22px;
+ font-weight:900;
+}
+
+.logo span{color:#00f5d4}
+
+.install{
+ width:auto;
+ padding:10px 14px;
+ margin:0;
+ background:#19192c;
+ border:1px solid #34344c;
+ border-radius:10px;
+}
+
+.hero{
+ text-align:center;
+ padding:25px 10px;
+}
+
+.icon{
+ font-size:48px;
+ margin-bottom:12px;
+}
+
+h1{
+ font-size:27px;
+ margin:5px 0;
+}
+
+.hero p{
+ color:#9999b2;
+ font-size:13px;
+}
+
+.container{
+ background:#141426;
+ border:1px solid #292943;
+ padding:20px;
+ border-radius:20px;
+}
+
+input{
+ width:100%;
+ padding:16px;
+ border:1px solid #34344c;
+ border-radius:12px;
+ background:#090914;
+ color:white;
+ outline:none;
+ margin:10px 0;
+ font-size:14px;
+}
+
+input:focus{border-color:#00e5cc}
+
+button{
+ width:100%;
+ padding:14px;
+ border:0;
+ border-radius:12px;
+ margin-top:10px;
+ background:linear-gradient(90deg,#00e5cc,#715cff);
+ color:#080817;
+ font-weight:bold;
+ font-size:14px;
+ cursor:pointer;
+}
+
+button:disabled{
+ opacity:.5;
+}
+
+.install{
+ color:white;
+}
+
+.loading{
+ margin-top:15px;
+ display:none;
+}
+
+.progress-bg{
+ height:8px;
+ background:#292943;
+ border-radius:20px;
+ overflow:hidden;
+}
+
+.progress-bar{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#00e5cc,#715cff);
+ transition:width .2s;
+}
+
+.progress-text{
+ font-size:12px;
+ color:#aaa;
+ margin-top:7px;
+ text-align:center;
+}
+
+.preview{
+ margin-top:18px;
+ padding:12px;
+ background:#0c0c19;
+ border-radius:15px;
+ border:1px solid #292943;
+}
+
+video{
+ width:100%;
+ max-height:450px;
+ border-radius:12px;
+ background:black;
+}
+
+.video-title{
+ font-size:14px;
+ margin:12px 0;
+ overflow-wrap:anywhere;
+}
+
+.download-btn{
+ background:linear-gradient(90deg,#00e5cc,#00aaff);
+}
+
+.audio-btn{
+ background:linear-gradient(90deg,#a66bff,#715cff);
+ color:white;
+}
+
+h3{
+ margin-top:30px;
+ font-size:17px;
+}
+
+.card{
+ display:flex;
+ gap:12px;
+ padding:12px;
+ margin-top:10px;
+ background:#141426;
+ border:1px solid #292943;
+ border-radius:14px;
+}
+
+.thumb{
+ width:85px;
+ height:110px;
+ object-fit:cover;
+ border-radius:9px;
+ background:#292943;
+}
+
+.card-info{
+ flex:1;
+ min-width:0;
+}
+
+.card-title{
+ font-size:13px;
+ overflow-wrap:anywhere;
+}
+
+.small-btn{
+ padding:9px;
+ font-size:11px;
+ margin-top:7px;
+}
+
+.empty{
+ text-align:center;
+ padding:20px;
+ color:#77778f;
+ font-size:13px;
+}
+
+.footer{
+ text-align:center;
+ color:#66667c;
+ font-size:12px;
+ margin:30px 0 15px;
+}
+</style>
+</head>
+
+<body>
+<div class="app">
+
+<div class="header">
+ <div class="logo">TIK<span>DOWN</span></div>
+ <button class="install" id="installBtn" style="display:none">
+  ⬇ Install App
+ </button>
+</div>
+
+<div class="hero">
+ <div class="icon">🎵</div>
+ <h1>TikTok Downloader</h1>
+ <p>Download TikTok videos & audio easily</p>
+</div>
+
+<div class="container">
+
+<input id="url" type="url"
+placeholder="Paste TikTok video link here">
+
+<button id="downloadBtn" onclick="getVideo()">
+ ⚡ Get Video
+</button>
+
+<div class="loading" id="loading">
+ <div class="progress-bg">
+  <div class="progress-bar" id="bar"></div>
+ </div>
+ <div class="progress-text" id="progressText">0%</div>
+</div>
+
+<div id="previewBox"></div>
+
+</div>
+
+<h3>📜 Download History</h3>
+<div id="history"></div>
+
+<div class="footer">
+ TikDown © 2026 | TikTok Downloader
+</div>
+
+</div>
+
+<script>
+let currentVideo="";
+let currentAudio="";
+let currentData={};
+
+let installPrompt=null;
+
+const installBtn=document.getElementById("installBtn");
+
+window.addEventListener("beforeinstallprompt",e=>{
+ e.preventDefault();
+ installPrompt=e;
+ installBtn.style.display="block";
+});
+
+installBtn.onclick=async()=>{
+ if(!installPrompt){
+  alert("Use your browser menu and select Install App or Add to Home Screen.");
+  return;
+ }
+
+ await installPrompt.prompt();
+ installPrompt=null;
+ installBtn.style.display="none";
+};
+
+if("serviceWorker" in navigator){
+ window.addEventListener("load",()=>{
+  navigator.serviceWorker.register("./sw.js")
+   .catch(err=>console.log(err));
+ });
+}
+
+function cleanName(name){
+ return (name||"tiktok_video")
+ .replace(/[^a-z0-9]/gi,"_")
+ .toLowerCase()
+ .substring(0,50);
+}
+
+function startLoading(){
+ const loading=document.getElementById("loading");
+ const bar=document.getElementById("bar");
+ const text=document.getElementById("progressText");
+
+ loading.style.display="block";
+ bar.style.width="0%";
+
+ let p=0;
+
+ const timer=setInterval(()=>{
+  p=Math.min(p+4,90);
+  bar.style.width=p+"%";
+  text.innerText=p+"%";
+ },100);
+
+ return {
+  finish(){
+   clearInterval(timer);
+   bar.style.width="100%";
+   text.innerText="100%";
+  },
+  stop(){
+   clearInterval(timer);
+   loading.style.display="none";
+  }
+ };
+}
+
+async function getVideo(){
+
+ const url=document.getElementById("url").value.trim();
+ const box=document.getElementById("previewBox");
+ const btn=document.getElementById("downloadBtn");
+
+ if(!url){
+  alert("Paste TikTok link first!");
+  return;
+ }
+
+ if(!/^https?:\/\/(www\.|vm\.|vt\.)?tiktok\.com\//i.test(url)){
+  alert("Only TikTok links are supported!");
+  return;
+ }
+
+ btn.disabled=true;
+ box.innerHTML="";
+
+ const loader=startLoading();
+
+ try{
+
+  const api="https://tikwm.com/api/?url="+encodeURIComponent(url);
+
+  const response=await fetch(api);
+  if(!response.ok) throw new Error("API request failed");
+
+  const data=await response.json();
+
+  if(data.code!==0 || !data.data){
+   throw new Error("Video not found");
+  }
+
+  currentVideo=data.data.play;
+  currentAudio=data.data.music;
+
+  currentData={
+   title:data.data.title||"TikTok Video",
+   img:data.data.cover||""
+  };
+
+  if(!currentVideo) throw new Error("Video unavailable");
+
+  loader.finish();
+
+  box.innerHTML=`
+   <div class="preview">
+
+    <video controls playsinline
+    src="${currentVideo}"></video>
+
+    <div class="video-title"></div>
+
+    <button class="download-btn" onclick="downloadVideo()">
+     ⬇ Download MP4
+    </button>
+
+    <button class="audio-btn" onclick="downloadMP3()"
+    ${currentAudio?"":"disabled"}>
+     🎧 Download MP3
+    </button>
+
+   </div>
+  `;
+
+  box.querySelector(".video-title").textContent=currentData.title;
+
+  saveHistory();
+
+ }catch(error){
+
+  loader.stop();
+  box.innerHTML=`
+   <div class="empty">
+    ⚠️ Unable to get video.<br>
+    Please check the link and try again.
+   </div>
+  `;
+
+ }finally{
+  btn.disabled=false;
+ }
+}
+
+async function downloadFile(url,extension){
+
+ if(!url) return;
+
+ try{
+
+  const response=await fetch(url);
+  if(!response.ok) throw new Error("Download failed");
+
+  const blob=await response.blob();
+  const objectURL=URL.createObjectURL(blob);
+
+  const a=document.createElement("a");
+  a.href=objectURL;
+  a.download=cleanName(currentData.title)+"."+extension;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+
+  setTimeout(()=>URL.revokeObjectURL(objectURL),10000);
+
+ }catch(error){
+  alert("Download failed. Try opening the video link in your browser.");
+ }
+}
+
+function downloadVideo(){
+ downloadFile(currentVideo,"mp4");
+}
+
+function downloadMP3(){
+ downloadFile(currentAudio,"mp3");
+}
+
+function saveHistory(){
+
+ let h=JSON.parse(localStorage.getItem("tt"))||[];
+
+ h=h.filter(v=>v.video!==currentVideo);
+
+ h.unshift({
+  title:currentData.title,
+  img:currentData.img,
+  video:currentVideo,
+  audio:currentAudio
+ });
+
+ h=h.slice(0,5);
+
+ localStorage.setItem("tt",JSON.stringify(h));
+
+ loadHistory();
+}
+
+function redownload(url,type,title){
+
+ if(!url){
+  alert("File unavailable");
+  return;
+ }
+
+ currentData.title=title;
+ downloadFile(url,type);
+}
+
+function loadHistory(){
+
+ let h=JSON.parse(localStorage.getItem("tt"))||[];
+ let html="";
+
+ if(h.length===0){
+  document.getElementById("history").innerHTML=
+  '<div class="empty">No download history yet</div>';
+  return;
+ }
+
+ h.forEach((v,i)=>{
+
+  html+=`
+   <div class="card">
+
+    <img class="thumb"
+    src="${v.img||""}"
+    alt="Thumbnail">
+
+    <div class="card-info">
+     <div class="card-title" id="title${i}"></div>
+
+     <button class="small-btn"
+     onclick="redownloadByIndex(${i},'mp4')">
+      ↻ Video
+     </button>
+
+     <button class="small-btn"
+     onclick="redownloadByIndex(${i},'mp3')">
+      ↻ MP3
+     </button>
+    </div>
+
+   </div>
+  `;
+ });
+
+ document.getElementById("history").innerHTML=html;
+
+ h.forEach((v,i)=>{
+  document.getElementById("title"+i).textContent=v.title;
+ });
+}
+
+function redownloadByIndex(index,type){
+ let h=JSON.parse(localStorage.getItem("tt"))||[];
+ let v=h[index];
+
+ if(!v)return;
+
+ currentData.title=v.title;
+ downloadFile(type==="mp3"?v.audio:v.video,type);
+}
+
+loadHistory();
+</script>
+</body>
+</html>
+{
+  "name": "TikDown - TikTok Downloader",
+  "short_name": "TikDown",
+  "description": "TikTok Video Downloader",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#090914",
+  "theme_color": "#090914",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
