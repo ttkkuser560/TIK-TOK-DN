@@ -4,14 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="theme-color" content="#090914">
-<meta name="description" content="TikDown Multi Platform Video Tool">
+<meta name="description" content="Nexus Downloader - TikTok and Instagram Video Downloader">
 <link rel="manifest" href="manifest.json">
-<title>TikDown - Video Downloader</title>
+<title>NEXUS DOWNLOADER</title>
 
 <style>
 *{box-sizing:border-box}
 body{
- margin:0;padding:18px;font-family:Arial;
+ margin:0;padding:18px;font-family:Arial,sans-serif;
  color:white;background:#090914;min-height:100vh
 }
 .app{max-width:480px;margin:auto}
@@ -19,7 +19,7 @@ body{
  display:flex;justify-content:space-between;
  align-items:center;margin:10px 0 20px
 }
-.logo{font-size:23px;font-weight:900}
+.logo{font-size:21px;font-weight:900;letter-spacing:1px}
 .logo span{color:#00e5cc}
 .install{
  width:auto!important;margin:0!important;
@@ -40,15 +40,26 @@ h1{font-size:27px;margin:8px}
  gap:9px;margin:12px 0 18px
 }
 .platform{
- padding:12px 3px;border-radius:12px;
- background:#090914;color:white;
- border:1px solid #34344c;
- font-size:12px;cursor:pointer
+ min-height:83px;padding:10px 3px;
+ border-radius:12px;background:#090914;
+ color:white;border:1px solid #34344c;
+ font-size:12px;cursor:pointer;
+ display:flex;flex-direction:column;
+ align-items:center;justify-content:center;gap:7px
 }
 .platform.active{
  border:1px solid #00e5cc;
  background:#12302f;color:#00e5cc
 }
+.platform.unavailable{
+ background:#090909;
+ border:1px solid #202020;
+ color:#555568;
+ filter:grayscale(1)
+}
+.platform.unavailable svg{opacity:.35}
+.platform svg{width:27px;height:27px;display:block}
+.platform.active svg{opacity:1}
 input{
  width:100%;padding:15px;
  border:1px solid #34344c;border-radius:12px;
@@ -61,7 +72,7 @@ button{
  background:linear-gradient(90deg,#00e5cc,#715cff);
  color:#080817;font-weight:bold;cursor:pointer
 }
-button:disabled{opacity:.5}
+button:disabled{opacity:.5;cursor:not-allowed}
 .loading{margin-top:15px;display:none}
 .progress-bg{
  height:8px;background:#292943;
@@ -69,7 +80,8 @@ button:disabled{opacity:.5}
 }
 .progress-bar{
  height:100%;width:0%;
- background:linear-gradient(90deg,#00e5cc,#715cff)
+ background:linear-gradient(90deg,#00e5cc,#715cff);
+ transition:width .2s
 }
 .progress-text{text-align:center;font-size:12px;color:#aaa;margin-top:7px}
 .preview{
@@ -108,7 +120,7 @@ h3{margin-top:28px;font-size:17px}
 <div class="app">
 
 <div class="header">
- <div class="logo">TIK<span>DOWN</span></div>
+ <div class="logo">NEXUS <span>DOWNLOADER</span></div>
  <button class="install" id="installBtn" style="display:none">
  ⬇ Install App
  </button>
@@ -116,7 +128,7 @@ h3{margin-top:28px;font-size:17px}
 
 <div class="hero">
  <div class="icon">🎬</div>
- <h1>TikDown</h1>
+ <h1>NEXUS DOWNLOADER</h1>
  <p>Multi-Platform Video Hub</p>
 </div>
 
@@ -125,12 +137,68 @@ h3{margin-top:28px;font-size:17px}
 <b>🌐 Select Platform</b>
 
 <div class="platform-grid">
- <button class="platform active" data-platform="tiktok">🎵 TikTok</button>
- <button class="platform" data-platform="facebook">🔵 Facebook</button>
- <button class="platform" data-platform="instagram">📸 Instagram</button>
- <button class="platform" data-platform="youtube">▶️ YouTube</button>
- <button class="platform" data-platform="pinterest">📌 Pinterest</button>
- <button class="platform" data-platform="threads">🧵 Threads</button>
+
+ <button class="platform active" data-platform="tiktok">
+  <!-- TikTok mark -->
+  <svg viewBox="0 0 24 24" aria-label="TikTok logo">
+   <path fill="#25F4EE" d="M14 2h3c.2 2.3 1.4 4 4 4.5v3c-1.7-.1-3.1-.7-4.3-1.6v7.2a6.1 6.1 0 1 1-6.1-6.1h.8v3.2h-.8a2.9 2.9 0 1 0 2.9 2.9V2z"/>
+   <path fill="#FE2C55" d="M12.5 3h2.8c.2 2.3 1.3 4 3.8 4.5v2.8c-1.4-.1-2.6-.6-3.7-1.4v7a6 6 0 0 1-6 6v-3.1a2.9 2.9 0 0 0 2.9-2.9V3z"/>
+   <path fill="white" d="M13.5 2h2.8c.2 2.3 1.4 4 3.8 4.5v2.8c-1.5-.1-2.8-.7-3.8-1.5v7a6 6 0 1 1-6-6h.7v3.1h-.7a2.9 2.9 0 1 0 2.9 2.9V2z"/>
+  </svg>
+  TikTok
+ </button>
+
+ <button class="platform unavailable" data-platform="facebook">
+  <!-- Facebook logo -->
+  <svg viewBox="0 0 24 24" aria-label="Facebook logo">
+   <path fill="#1877F2" d="M24 12a12 12 0 1 0-13.9 11.9v-8.4H7.1V12h3V9.3c0-3 1.8-4.7 4.5-4.7 1.3 0 2.6.2 2.6.2v2.9h-1.5c-1.5 0-2 .9-2 1.9V12h3.4l-.5 3.5h-2.9v8.4A12 12 0 0 0 24 12"/>
+  </svg>
+  Facebook
+ </button>
+
+ <button class="platform" data-platform="instagram">
+  <!-- Instagram logo -->
+  <svg viewBox="0 0 24 24" aria-label="Instagram logo">
+   <defs>
+    <linearGradient id="igGradient" x1="0" y1="1" x2="1" y2="0">
+     <stop offset="0" stop-color="#FFDC80"/>
+     <stop offset=".45" stop-color="#F77737"/>
+     <stop offset=".7" stop-color="#E1306C"/>
+     <stop offset="1" stop-color="#833AB4"/>
+    </linearGradient>
+   </defs>
+   <rect x="2" y="2" width="20" height="20" rx="6" fill="none" stroke="url(#igGradient)" stroke-width="2.5"/>
+   <circle cx="12" cy="12" r="4.5" fill="none" stroke="url(#igGradient)" stroke-width="2"/>
+   <circle cx="18" cy="6.5" r="1.4" fill="#E1306C"/>
+  </svg>
+  Instagram
+ </button>
+
+ <button class="platform unavailable" data-platform="youtube">
+  <!-- YouTube logo -->
+  <svg viewBox="0 0 24 24" aria-label="YouTube logo">
+   <path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8"/>
+   <path fill="white" d="m9.6 15.5 6.3-3.5-6.3-3.5z"/>
+  </svg>
+  YouTube
+ </button>
+
+ <button class="platform unavailable" data-platform="pinterest">
+  <!-- Pinterest logo -->
+  <svg viewBox="0 0 24 24" aria-label="Pinterest logo">
+   <path fill="#E60023" d="M12 1a11 11 0 0 0-4 21.2c-.1-1.8 0-3.9.4-5.8l1.5-6.3s-.4-.8-.4-2c0-1.9 1.1-3.4 2.5-3.4 1.2 0 1.8.9 1.8 2 0 1.2-.8 3-1.2 4.7-.4 1.4.7 2.5 2.1 2.5 2.5 0 4.4-2.7 4.4-6.6 0-3.5-2.5-5.9-6-5.9-4.1 0-6.5 3.1-6.5 6.3 0 1.2.5 2.5 1.1 3.2.1.2.2.4.1.7l-.4 1.5c-.1.5-.3.6-.8.4-1.8-.8-2.9-3.2-2.9-5.2 0-4.2 3-8.1 8.7-8.1 4.6 0 8.2 3.3 8.2 7.8 0 4.7-3 8.5-7.1 8.5-1.4 0-2.7-.8-3.2-1.7l-.9 3.4c-.3 1.2-1.1 2.7-1.6 3.6A11 11 0 1 0 12 1"/>
+  </svg>
+  Pinterest
+ </button>
+
+ <button class="platform unavailable" data-platform="threads">
+  <!-- Threads logo -->
+  <svg viewBox="0 0 24 24" aria-label="Threads logo">
+   <path fill="none" stroke="white" stroke-width="2" stroke-linecap="round" d="M18.5 10.3c-.5-4.4-3-6.8-6.8-6.8-4.6 0-7.5 3.2-7.5 8.5 0 5.2 2.8 8.5 7.5 8.5 4.1 0 6.5-2.3 6.5-5.4 0-2.5-1.8-4-4.3-4-2.3 0-3.7 1.2-3.7 2.9 0 1.5 1.1 2.5 2.7 2.5 2.3 0 3.7-1.7 3.7-4.5 0-1.1-.2-2.2-.6-3.1"/>
+  </svg>
+  Threads
+ </button>
+
 </div>
 
 <input id="url" type="url" placeholder="Paste TikTok link here">
@@ -150,7 +218,7 @@ h3{margin-top:28px;font-size:17px}
 <h3>📜 Download History</h3>
 <div id="history"></div>
 
-<div class="footer">TikDown © 2026</div>
+<div class="footer">NEXUS DOWNLOADER © 2026</div>
 </div>
 
 <script>
@@ -158,6 +226,8 @@ let selectedPlatform="tiktok";
 let currentVideo="";
 let currentAudio="";
 let currentData={};
+
+const API_URL="https://tikdown-api-2sm9.onrender.com/download";
 
 const $=id=>document.getElementById(id);
 
@@ -170,12 +240,26 @@ const patterns={
  threads:/threads\.net/i
 };
 
+const unavailableMessage =
+"Service unavailable right now. The developer is still trying to fix this service.";
+
 document.querySelectorAll(".platform").forEach(btn=>{
  btn.addEventListener("click",()=>{
-  document.querySelectorAll(".platform").forEach(b=>b.classList.remove("active"));
+  const platform=btn.dataset.platform;
+
+  if(btn.classList.contains("unavailable")){
+   alert(unavailableMessage);
+   return;
+  }
+
+  document.querySelectorAll(".platform").forEach(b=>{
+   b.classList.remove("active");
+  });
+
   btn.classList.add("active");
-  selectedPlatform=btn.dataset.platform;
-  $("url").placeholder="Paste "+selectedPlatform+" link here";
+  selectedPlatform=platform;
+
+  $("url").placeholder="Paste "+platform+" link here";
   $("previewBox").innerHTML="";
  });
 });
@@ -204,18 +288,22 @@ if("serviceWorker" in navigator){
 }
 
 function cleanName(name){
- return (name||"video").replace(/[^a-z0-9]/gi,"_").toLowerCase().substring(0,50);
+ return (name||"video")
+ .replace(/[^a-z0-9]/gi,"_")
+ .toLowerCase()
+ .substring(0,50);
 }
 
 function startLoading(){
  $("loading").style.display="block";
  $("bar").style.width="0%";
+
  let p=0;
  const timer=setInterval(()=>{
-  p=Math.min(p+4,90);
+  p=Math.min(p+3,90);
   $("bar").style.width=p+"%";
   $("progressText").innerText=p+"%";
- },100);
+ },150);
 
  return {
   finish(){
@@ -241,6 +329,7 @@ function youtubeId(url){
  try{
   const u=new URL(url);
   if(u.hostname==="youtu.be") return u.pathname.slice(1);
+
   if(u.hostname.includes("youtube.com")){
    if(u.pathname==="/watch")return u.searchParams.get("v");
    const m=u.pathname.match(/^\/(embed|shorts)\/([^/]+)/);
@@ -286,6 +375,125 @@ function showExternalPreview(url,platform){
  box.replaceChildren(preview);
 }
 
+function showVideoPreview(videoURL,titleText,platform,thumbnail=""){
+ const box=$("previewBox");
+ const preview=document.createElement("div");
+ preview.className="preview";
+
+ const video=document.createElement("video");
+ video.controls=true;
+ video.playsInline=true;
+ video.src=videoURL;
+
+ const title=document.createElement("div");
+ title.className="video-title";
+ title.textContent=titleText;
+
+ const downloadBtn=document.createElement("button");
+ downloadBtn.className="download-btn";
+ downloadBtn.textContent="⬇ Download MP4";
+
+ downloadBtn.onclick=()=>{
+  downloadFile(videoURL,"mp4",titleText);
+ };
+
+ preview.append(video,title,downloadBtn);
+ box.replaceChildren(preview);
+
+ saveHistory({
+  platform:platform,
+  title:titleText,
+  img:thumbnail,
+  video:platform==="tiktok"?videoURL:"",
+  audio:platform==="tiktok"?currentAudio:"",
+  sourceUrl:$("url").value.trim()
+ });
+}
+
+async function getTikTok(url){
+ const api="https://tikwm.com/api/?url="+encodeURIComponent(url);
+ const response=await fetch(api);
+
+ if(!response.ok)throw Error("API request failed");
+
+ const result=await response.json();
+
+ if(result.code!==0 || !result.data){
+  throw Error("Video not found");
+ }
+
+ currentVideo=result.data.play;
+ currentAudio=result.data.music;
+
+ currentData={
+  title:result.data.title||"TikTok Video",
+  img:result.data.cover||""
+ };
+
+ if(!currentVideo)throw Error("Video unavailable");
+
+ showVideoPreview(
+  currentVideo,
+  currentData.title,
+  "tiktok",
+  currentData.img
+ );
+
+ // TikTok MP3 option
+ const preview=$("previewBox").firstElementChild;
+
+ const audioBtn=document.createElement("button");
+ audioBtn.className="audio-btn";
+ audioBtn.textContent="🎧 Download MP3";
+ audioBtn.disabled=!currentAudio;
+ audioBtn.onclick=downloadMP3;
+
+ preview.append(audioBtn);
+}
+
+async function getInstagram(url){
+ const response=await fetch(API_URL,{
+  method:"POST",
+  headers:{
+   "Content-Type":"application/json"
+  },
+  body:JSON.stringify({url:url})
+ });
+
+ if(!response.ok){
+  let message="Instagram download failed";
+
+  try{
+   const error=await response.json();
+   message=error.error||message;
+  }catch{}
+
+  throw Error(message);
+ }
+
+ const blob=await response.blob();
+
+ if(!blob.type.includes("video")){
+  throw Error("The server did not return a video file");
+ }
+
+ const objectURL=URL.createObjectURL(blob);
+
+ currentVideo=objectURL;
+ currentAudio="";
+
+ currentData={
+  title:"Instagram Video",
+  img:""
+ };
+
+ showVideoPreview(
+  objectURL,
+  currentData.title,
+  "instagram"
+ );
+}
+
 async function getVideo(){
 
  const url=$("url").value.trim();
@@ -304,66 +512,24 @@ async function getVideo(){
 
  btn.disabled=true;
  box.innerHTML="";
+
  const loader=startLoading();
 
  try{
-
-  if(selectedPlatform!=="tiktok"){
-   loader.finish();
-   showExternalPreview(url,selectedPlatform);
-   return;
+  if(selectedPlatform==="tiktok"){
+   await getTikTok(url);
   }
-
-  const api="https://tikwm.com/api/?url="+encodeURIComponent(url);
-  const response=await fetch(api);
-  if(!response.ok)throw Error("API request failed");
-
-  const result=await response.json();
-  if(result.code!==0 || !result.data)throw Error("Video not found");
-
-  currentVideo=result.data.play;
-  currentAudio=result.data.music;
-
-  currentData={
-   title:result.data.title||"TikTok Video",
-   img:result.data.cover||""
-  };
-
-  if(!currentVideo)throw Error("Video unavailable");
+  else if(selectedPlatform==="instagram"){
+   await getInstagram(url);
+  }
 
   loader.finish();
 
-  const preview=document.createElement("div");
-  preview.className="preview";
-
-  const video=document.createElement("video");
-  video.controls=true;
-  video.playsInline=true;
-  video.src=currentVideo;
-
-  const title=document.createElement("div");
-  title.className="video-title";
-  title.textContent=currentData.title;
-
-  const videoBtn=document.createElement("button");
-  videoBtn.className="download-btn";
-  videoBtn.textContent="⬇ Download MP4";
-  videoBtn.onclick=downloadVideo;
-
-  const audioBtn=document.createElement("button");
-  audioBtn.className="audio-btn";
-  audioBtn.textContent="🎧 Download MP3";
-  audioBtn.disabled=!currentAudio;
-  audioBtn.onclick=downloadMP3;
-
-  preview.append(video,title,videoBtn,audioBtn);
-  box.replaceChildren(preview);
-
-  saveHistory();
-
  }catch(error){
   loader.stop();
-  box.textContent="⚠️ Unable to load content. Check the link or try again.";
+  box.textContent="⚠️ "+(
+   error.message||"Unable to load content. Check the link or try again."
+  );
  }finally{
   btn.disabled=false;
  }
@@ -372,7 +538,6 @@ async function getVideo(){
 $("getBtn").onclick=getVideo;
 
 async function downloadFile(url,extension,title){
-
  if(!url){
   alert("File unavailable");
   return;
@@ -388,11 +553,13 @@ async function downloadFile(url,extension,title){
   const a=document.createElement("a");
   a.href=objectURL;
   a.download=cleanName(title)+"."+extension;
+
   document.body.appendChild(a);
   a.click();
   a.remove();
 
   setTimeout(()=>URL.revokeObjectURL(objectURL),10000);
+
  }catch{
   alert("Download failed. The source may block browser downloads.");
  }
@@ -406,25 +573,44 @@ function downloadMP3(){
  downloadFile(currentAudio,"mp3",currentData.title);
 }
 
-function saveHistory(){
-
+function saveHistory(item){
  let h=JSON.parse(localStorage.getItem("tt")||"[]");
- h=h.filter(v=>v.video!==currentVideo);
 
- h.unshift({
-  title:currentData.title,
-  img:currentData.img,
-  video:currentVideo,
-  audio:currentAudio
+ h=h.filter(v=>{
+  return !(v.sourceUrl===item.sourceUrl &&
+           v.platform===item.platform);
  });
 
+ h.unshift(item);
  h=h.slice(0,5);
+
  localStorage.setItem("tt",JSON.stringify(h));
  loadHistory();
 }
 
-function loadHistory(){
+async function downloadHistoryItem(item){
+ if(item.platform==="instagram"){
+  $("url").value=item.sourceUrl;
+  selectedPlatform="instagram";
 
+  document.querySelectorAll(".platform").forEach(b=>{
+   b.classList.toggle(
+    "active",
+    b.dataset.platform==="instagram"
+   );
+  });
+
+  $("url").placeholder="Paste instagram link here";
+  await getVideo();
+  return;
+ }
+
+ if(item.video){
+  await downloadFile(item.video,"mp4",item.title);
+ }
+}
+
+function loadHistory(){
  const h=JSON.parse(localStorage.getItem("tt")||"[]");
  const box=$("history");
 
@@ -435,13 +621,13 @@ function loadHistory(){
 
  box.replaceChildren();
 
- h.forEach((v,i)=>{
+ h.forEach(item=>{
   const card=document.createElement("div");
   card.className="card";
 
   const img=document.createElement("img");
   img.className="thumb";
-  img.src=v.img||"";
+  img.src=item.img||"";
   img.alt="Video thumbnail";
 
   const info=document.createElement("div");
@@ -449,20 +635,26 @@ function loadHistory(){
 
   const title=document.createElement("div");
   title.className="card-title";
-  title.textContent=v.title;
+  title.textContent=item.title+" ("+(item.platform||"video")+")";
 
   const videoBtn=document.createElement("button");
   videoBtn.className="small-btn";
   videoBtn.textContent="↻ Video";
-  videoBtn.onclick=()=>downloadFile(v.video,"mp4",v.title);
+  videoBtn.onclick=()=>downloadHistoryItem(item);
 
-  const audioBtn=document.createElement("button");
-  audioBtn.className="small-btn";
-  audioBtn.textContent="↻ MP3";
-  audioBtn.disabled=!v.audio;
-  audioBtn.onclick=()=>downloadFile(v.audio,"mp3",v.title);
+  info.append(title,videoBtn);
 
-  info.append(title,videoBtn,audioBtn);
+  if(item.platform==="tiktok"){
+   const audioBtn=document.createElement("button");
+   audioBtn.className="small-btn";
+   audioBtn.textContent="↻ MP3";
+   audioBtn.disabled=!item.audio;
+   audioBtn.onclick=()=>downloadFile(
+    item.audio,"mp3",item.title
+   );
+   info.append(audioBtn);
+  }
+
   card.append(img,info);
   box.append(card);
  });
